@@ -26,7 +26,7 @@ class Tower extends Scene {
 
 
         const button = new Label({
-            text: "Start Game",
+            text: "Fight!",
             width: 200,
             height: 50,
             pos: new Vector(400, 400),
@@ -101,28 +101,20 @@ class Tower extends Scene {
     afterBatle() {
         console.log('after battle')
         // get button and set it to go back to previous scene
-        const button = new Actor()
-
-        const text = new Text({
-            text: "Back", font: new Font(
+        const button = new Label({
+            text: "Start Game",
+            width: 200,
+            height: 50,
+            pos: new Vector(400, 400),
+            anchor: new Vector(0.5, 0.5),
+            color: Color.White,
+            font: new Font(
                 {
                     size: 32,
-                    // baseAlign: BaseAlign.Middle,
-                    // textAlign: TextAlign.Center
+                    baseAlign: BaseAlign.Middle,
+                    textAlign: TextAlign.Center
                 })
         });
-        const buttonBackground = new Rectangle({
-            width: 167,
-            height: 34,
-            color: new Color(200, 200, 255)
-        })
-
-        const buttonGroup = new GraphicsGroup({
-            members: [buttonBackground, text]
-        })
-
-        button.graphics.use(buttonGroup)
-        button.pos = new Vector(400, 400)
         button.on('pointerdown', () => {
             // this.goToScene('game')
             console.log('back to game')
