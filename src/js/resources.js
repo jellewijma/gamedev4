@@ -1,17 +1,14 @@
 import { ImageSource, Sound, Resource, Loader } from 'excalibur'
-import * as tiled from '@excaliburjs/plugin-tiled';
-
-// import level1 from '../../public/assets/tilemap/Sample.tmx'
-
 
 const Resources = {
     Fish: new ImageSource('images/fish.png'),
-    // Background: new tiled.TiledResource('assets/tilemap/Sample.tmx'),
-    sample: new tiled.TiledResource('images/Sample.tmx')
+    Hero: new ImageSource('images/hero.png'),
+    Enemy: new ImageSource('images/enemy.png')
 }
 const ResourceLoader = new Loader([
     Resources.Fish,
-    Resources.sample
+    Resources.Hero,
+    Resources.Enemy
 ])
 
 export { Resources, ResourceLoader }

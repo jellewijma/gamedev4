@@ -1,52 +1,48 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Loader } from "excalibur"
+import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Label } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import { TiledResource } from '@excaliburjs/plugin-tiled';
+import { Tower } from './tower.js'
 
 
 export class Game extends Engine {
-
-    tiledMap
-
     constructor() {
-        super({ width: 800, height: 600 })
+        super({ width: 800, height: 600, pixelArt: true, maxFps: 30 })
         this.start(ResourceLoader).then(() => this.startGame())
     }
-    
-    
-    
+
+
+
     startGame() {
-        // console.log(this.tiledMap, loader)
-        // this.tiledMap.addToScene(this.currentScene);
+        const hero = new Actor()
+        hero.graphics.use(Resources.Hero.toSprite())
+        hero.pos = new Vector(400, 300)
+        hero.scale = new Vector(4, 4)
+        this.add(hero)
 
-        console.log("start de game!")
-        const fish = new Actor()
-        fish.graphics.use(Resources.Fish.toSprite())
-        fish.pos = new Vector(400, 300)
-        fish.vel = new Vector(-10,0)
-        this.add(fish)
+        const button = new Label({
+            text: "Start Game",
+            width: 200,
+            height: 50,
+            pos: new Vector(400, 400),
+            anchor: new Vector(0.5, 0.5),
+            color: Color.White,
+            font: new Font(
+                {
+                    size: 32,
+                    baseAlign: BaseAlign.Middle,
+                    textAlign: TextAlign.Center
+                })
+        });
 
+        button.on('pointerdown', () => {
+            // change scene
+            console.log('button clicked')
+            const tower = new Tower()
+            this.add('tower', tower)
+            this.goToScene('tower')
+        })
 
-        const bg = new Actor()
-        // bg.graphics.use(Resources.Background.toSprite())
-        // this.add(bg)
-        // this.tiledMap.graphics.use(Resources.sample.getTileMap())
-        // tiledMap.addToScene(this.currentScene);
-
-        // const background = new Actor()
-        // background.graphics.use(Resources.Background.getTileMap())
-        // background.pos = new Vector(0, 0)
-        // this.add(background)
-        
-        // tiledMapResource.addToScene(this.currentScene);
-        // this.currentScene.camera.zoom = 2;
-
-        // for (let tile of tilemap.tiles) {
-        //     const sprite = IsoDungeonSpriteSheet.getSprite(0, 0);
-        //     if (sprite) {
-        //         tile.addGraphic(sprite);
-        //     }
-        // }
+        this.add(button)
     }
 }
 
