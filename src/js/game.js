@@ -64,14 +64,15 @@ export class Game extends Engine {
     showCoins() {
         const showCoins = new Label({
             text: `Coins: ${this.coins}`,
-            width: 200,
-            height: 50,
-            pos: new Vector(100, 100),
+            width: 20,
+            height: 5,
+            z: 100,
+            pos: new Vector(20, 10),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 32,
+                    size: 8,
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center
                 })

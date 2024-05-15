@@ -38,14 +38,15 @@ class Tower extends Scene {
 
         this.button = new Label({
             text: "Fight!",
-            width: 200,
-            height: 50,
-            pos: new Vector(400, 400),
+            width: 20,
+            height: 5,
+            z: 100,
+            pos: new Vector(72, 200),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 32,
+                    size: 8,
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center
                 })
@@ -84,10 +85,11 @@ class Tower extends Scene {
 
             setTimeout(() => {
                 const content = new Text({
-                    text: "Hero wins", font: new Font({ size: 32 })
+                    text: "Hero wins", font: new Font({ size: 8 }), color: Color.White
                 });
                 const message = new Actor()
-                message.pos = new Vector(400, 200)
+                message.pos = new Vector(72, 100)
+                message.z = 100;
                 message.graphics.use(content)
                 this.add(message)
                 this.afterBatle(message)
@@ -101,10 +103,11 @@ class Tower extends Scene {
 
             setTimeout(() => {
                 const content = new Text({
-                    text: "Enemy wins", font: new Font({ size: 32 })
+                    text: "Enemy wins", font: new Font({ size: 8 }), color: Color.White
                 });
                 const message = new Actor()
-                message.pos = new Vector(400, 200)
+                message.pos = new Vector(72, 100)
+                message.z = 100;
                 message.graphics.use(content)
                 this.add(message)
                 this.afterBatle(message)
@@ -123,14 +126,15 @@ class Tower extends Scene {
         // get button and set it to go back to previous scene
         const button = new Label({
             text: "Go back to Town",
-            width: 200,
-            height: 50,
-            pos: new Vector(400, 400),
+            width: 20,
+            height: 5,
+            z: 100,
+            pos: new Vector(72, 200),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 32,
+                    size: 8,
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center
                 })
