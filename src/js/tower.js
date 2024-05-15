@@ -1,18 +1,30 @@
 import '../css/style.css'
 import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
+import { Town } from './town.js'
 
 
 class Tower extends Scene {
-    constructor() {
+    game
+    hero
+    button
+    // town
+    constructor(game) {
         super()
         console.log('Tower scene created')
+
+        this.game = game
+
     }
 
-    hero = new Actor()
+    onInitialize() { }
+
+    // hero = new Actor()
     enemy = new Actor()
 
     onActivate() {
+
+        this.hero = this.game.heroes[0]
         this.hero.graphics.use(Resources.Hero.toSprite())
         this.hero.pos = new Vector(350, 300)
         this.hero.scale = new Vector(4, 4)
@@ -25,7 +37,7 @@ class Tower extends Scene {
         this.add(this.enemy)
 
 
-        const button = new Label({
+        this.button = new Label({
             text: "Fight!",
             width: 200,
             height: 50,
@@ -39,11 +51,11 @@ class Tower extends Scene {
                     textAlign: TextAlign.Center
                 })
         });
-        button.on('pointerdown', () => {
+        this.button.on('pointerdown', () => {
             this.attack()
         })
 
-        this.add(button)
+        this.add(this.button)
     }
 
     attack() {
@@ -99,10 +111,13 @@ class Tower extends Scene {
     }
 
     afterBatle() {
+        // remove old button
+        this.remove(this.button)
+
         console.log('after battle')
         // get button and set it to go back to previous scene
         const button = new Label({
-            text: "Start Game",
+            text: "Go back to Town",
             width: 200,
             height: 50,
             pos: new Vector(400, 400),
@@ -116,7 +131,7 @@ class Tower extends Scene {
                 })
         });
         button.on('pointerdown', () => {
-            // this.goToScene('game')
+            this.game.goToScene('town')
             console.log('back to game')
         })
 

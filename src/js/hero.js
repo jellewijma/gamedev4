@@ -13,8 +13,14 @@ class Hero extends Actor {
     rarity = ''
     name = 'Hero'
 
+    game
+    destination
+    rand = new Random();
+    randomX
+    randomY
 
-    constructor() {
+
+    constructor(game) {
         super()
         this.graphics.use(Resources.Hero.toSprite())
         this.pos = new Vector(400, 300)
@@ -46,6 +52,10 @@ class Hero extends Actor {
         // randomize name
         const rand = new Random(1234)
         this.name = this.getName()
+
+        this.setRandomDestination()
+
+        this.game = game
     }
 
     getRarity() {
@@ -64,16 +74,15 @@ class Hero extends Actor {
     }
 
     getName() {
-        const rand = new Random(1234)
         var name = ''
         if (this.rarity == 'common') {
-            name = Resources.CommonNames[rand.integer(0, Resources.CommonNames.length - 1)]
+            name = Resources.CommonNames[this.rand.integer(0, Resources.CommonNames.length - 1)]
         } else if (this.rarity == 'rare') {
-            name = Resources.RareNames[rand.integer(0, Resources.RareNames.length - 1)]
+            name = Resources.RareNames[this.rand.integer(0, Resources.RareNames.length - 1)]
         } else if (this.rarity == 'epic') {
-            name = Resources.EpicNames[rand.integer(0, Resources.EpicNames.length - 1)]
+            name = Resources.EpicNames[this.rand.integer(0, Resources.EpicNames.length - 1)]
         } else if (this.rarity == 'legendary') {
-            name = Resources.LegendaryNames[rand.integer(0, Resources.LegendaryNames.length - 1)]
+            name = Resources.LegendaryNames[this.rand.integer(0, Resources.LegendaryNames.length - 1)]
         }
         return name
     }
@@ -85,4 +94,26 @@ class Hero extends Actor {
     Train() {
         console.log('training')
     }
+
+
+    setRandomDestination() {
+        this.randomX = this.rand.integer(0, 800);
+        this.randomY = this.rand.integer(0, 600);
+        this.destination = new Vector(this.randomX, this.randomY);
+    }
+
+    onPostUpdate() {
+        console.log(this.game.currentScene.name)
+        if (this.game.currentScene.name == 'Town') {
+            if (this.pos.distance(this.destination) < 5) { // If the hero is close to the destination
+                this.setRandomDestination();
+            } else {
+                const direction = this.destination.sub(this.pos).normalize(); // Get the direction to the destination
+                this.vel = direction.scale(100); // Move the hero in the direction of the destination
+            }
+        } else {
+            this.vel = new Vector(0, 0)
+        }
+    }
 }
+export { Hero }
