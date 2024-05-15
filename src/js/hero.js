@@ -23,8 +23,7 @@ class Hero extends Actor {
     constructor(game) {
         super()
         this.graphics.use(Resources.Hero.toSprite())
-        this.pos = new Vector(400, 300)
-        this.scale = new Vector(4, 4)
+        this.pos = new Vector(72, 128)
 
         this.rarity = this.getRarity()
         // distribute stats based on rarity
@@ -97,8 +96,8 @@ class Hero extends Actor {
 
 
     setRandomDestination() {
-        this.randomX = this.rand.integer(0, 800);
-        this.randomY = this.rand.integer(0, 600);
+        this.randomX = this.rand.integer(0, 144);
+        this.randomY = this.rand.integer(0, 256);
         this.destination = new Vector(this.randomX, this.randomY);
     }
 
@@ -109,7 +108,7 @@ class Hero extends Actor {
                 this.setRandomDestination();
             } else {
                 const direction = this.destination.sub(this.pos).normalize(); // Get the direction to the destination
-                this.vel = direction.scale(100); // Move the hero in the direction of the destination
+                this.vel = direction.scale(30); // Move the hero in the direction of the destination
             }
         } else {
             this.vel = new Vector(0, 0)

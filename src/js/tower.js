@@ -8,13 +8,14 @@ class Tower extends Scene {
     game
     hero
     button
+
+    rand = new Random(1234)
     // town
     constructor(game) {
         super()
         console.log('Tower scene created')
 
         this.game = game
-
     }
 
     onInitialize() { }
@@ -23,17 +24,15 @@ class Tower extends Scene {
     enemy = new Actor()
 
     onActivate() {
+        Resources.Tower.addToScene(this.game.currentScene)
 
         this.hero = this.game.heroes[0]
-        this.hero.graphics.use(Resources.Hero.toSprite())
-        this.hero.pos = new Vector(350, 300)
-        this.hero.scale = new Vector(4, 4)
+        this.hero.pos = new Vector(56, 128)
         this.add(this.hero)
 
 
         this.enemy.graphics.use(Resources.Enemy.toSprite())
-        this.enemy.pos = new Vector(450, 300)
-        this.enemy.scale = new Vector(4, 4)
+        this.enemy.pos = new Vector(88, 128)
         this.add(this.enemy)
 
 
@@ -66,11 +65,17 @@ class Tower extends Scene {
         this.enemy.pos.x -= 20
 
         // do a 50/50 of winning
-        const rand = new Random(1234)
-        var are_you_winning_son = rand.bool()
+
+        var are_you_winning_son = this.rand.bool()
         console.log(are_you_winning_son)
         // if hero wins
         // remove enemy
+
+        var i
+        for (i = 0; i < 100; i++) {
+            var are_you_winning_son = this.rand.bool()
+            console.log(are_you_winning_son)
+        }
 
 
         if (are_you_winning_son) {
@@ -85,24 +90,24 @@ class Tower extends Scene {
                 message.pos = new Vector(400, 200)
                 message.graphics.use(content)
                 this.add(message)
-                this.afterBatle()
+                this.afterBatle(message)
             }, 500);
         }
         // if enemy wins
         // remove hero
         if (!are_you_winning_son) {
             console.log('enemy wins')
-            this.remove(this.enemy)
+            this.remove(this.hero)
 
             setTimeout(() => {
                 const content = new Text({
-                    text: "Hero wins", font: new Font({ size: 32 })
+                    text: "Enemy wins", font: new Font({ size: 32 })
                 });
                 const message = new Actor()
                 message.pos = new Vector(400, 200)
                 message.graphics.use(content)
                 this.add(message)
-                this.afterBatle()
+                this.afterBatle(message)
             }, 500);
         }
 
@@ -110,7 +115,7 @@ class Tower extends Scene {
 
     }
 
-    afterBatle() {
+    afterBatle(message) {
         // remove old button
         this.remove(this.button)
 
@@ -132,7 +137,9 @@ class Tower extends Scene {
         });
         button.on('pointerdown', () => {
             this.game.goToScene('town')
+            this.remove(button)
             console.log('back to game')
+            this.remove(message)
         })
 
         this.add(button)
