@@ -13,7 +13,6 @@ export class Game extends Engine {
     heroes = []
     coins
 
-
     constructor() {
         super({
             width: 144,
@@ -21,6 +20,8 @@ export class Game extends Engine {
             pixelArt: true,
             maxFps: 30,
             displayMode: DisplayMode.FitScreen,
+            antialiasing: false,
+            pixelRatio: 16,
         })
         this.start(ResourceLoader).then(() => this.startGame())
         const town = new Town(this)
