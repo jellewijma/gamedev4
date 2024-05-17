@@ -12,6 +12,9 @@ class Enemy extends Character {
     enemy
     enemyDist
 
+    healthBar
+    HBbg
+
     attackStopper = 180
 
     game
@@ -56,6 +59,7 @@ class Enemy extends Character {
             console.log('attacking')
             this.enemy.health -= this.attack
             this.attackStopper = 180
+            // this.enemy.healthBar.width = 1
         }
 
         // if heor health is 0 remove enemy
@@ -79,8 +83,38 @@ class Enemy extends Character {
         console.log('training')
     }
 
-    onActivate() {
-        this.rarity = this.getTowerLvl()
+    HealthBar() {
+        if (this.healthBar != undefined) {
+
+            this.removeChild(this.healthBar)
+            this.removeChild(this.HBbg)
+        }
+
+        this.HBbg = new Actor({
+            width: 16,
+            height: 2,
+            x: 0,
+            y: -10,
+            color: Color.Black
+        })
+
+        // create a health bar
+        this.healthBar = new Actor({
+            width: this.health / this.baseHealth * 16,
+            height: 2,
+            x: -8,
+            y: -10,
+            color: Color.Red,
+            anchor: vec(0, 0.5)
+        })
+        this.addChild(this.HBbg)
+        this.addChild(this.healthBar)
+
+    }
+
+    onPostUpdate() {
+        // update health bar
+        this.HealthBar()
     }
 }
 export { Enemy }

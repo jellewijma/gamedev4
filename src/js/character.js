@@ -16,14 +16,5 @@ class Character extends Actor {
         super()
     }
 
-
-    Attack() {
-        console.log('attacking')
-    }
-
-    Train() {
-        console.log('training')
-    }
-
 }
 export { Character }

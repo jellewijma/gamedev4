@@ -20,6 +20,9 @@ class Hero extends Character {
     randomX
     randomY
 
+    healthBar
+    HBbg
+
 
     constructor(game) {
         super()
@@ -60,6 +63,9 @@ class Hero extends Character {
         this.setRandomDestination()
 
         this.game = game
+
+        // this.super.healthBar()
+        this.HealthBar()
     }
 
     getRarity() {
@@ -140,6 +146,39 @@ class Hero extends Character {
         } else {
             this.vel = new Vector(0, 0)
         }
+
+        // update health bar
+        this.HealthBar()
+
+    }
+
+    HealthBar() {
+        if (this.healthBar != undefined) {
+
+            this.removeChild(this.healthBar)
+            this.removeChild(this.HBbg)
+        }
+
+        this.HBbg = new Actor({
+            width: 16,
+            height: 2,
+            x: 0,
+            y: -10,
+            color: Color.Black
+        })
+
+        // create a health bar
+        this.healthBar = new Actor({
+            width: this.health / this.baseHealth * 16,
+            height: 2,
+            x: -8,
+            y: -10,
+            color: Color.Red,
+            anchor: vec(0, 0.5)
+        })
+        this.addChild(this.HBbg)
+        this.addChild(this.healthBar)
+
     }
 }
 export { Hero }

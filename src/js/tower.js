@@ -25,17 +25,22 @@ class Tower extends Scene {
 
     onInitialize() {
         // hero = new Actor()
-        this.enemy = new Enemy(this.game)
+
     }
 
 
     onActivate() {
         Resources.Tower.addToScene(this.game.currentScene)
 
+        this.enemy = new Enemy(this.game)
+        this.enemy.enemyDist = 100
 
+        console.log('Tower scene activated')
 
         this.hero = this.game.heroes[0]
         this.hero.pos = new Vector(56, 128)
+        this.hero.enemyDist = 100
+        // this.hero.healthBar()
         this.add(this.hero)
 
 
