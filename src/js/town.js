@@ -6,6 +6,7 @@ class Town extends Scene {
 
     game
     name
+    level
 
     constructor(game) {
         super()

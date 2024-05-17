@@ -1,17 +1,18 @@
 import '../css/style.css'
 import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
+import { Character } from './character.js'
 
 
-class Hero extends Actor {
-    health = 100
-    attack = 10
-    defense = 5
-    speed = 5
-    level = 1
+class Hero extends Character {
     experience = 0
     rarity = ''
     name = 'Hero'
+    type = 'hero'
+    enemy
+    enemyDist
+
+    attackStopper = 180
 
     game
     destination
@@ -29,21 +30,25 @@ class Hero extends Actor {
         // distribute stats based on rarity
         if (this.rarity == 'common') {
             this.health = 100
+            this.baseHealth = 100
             this.attack = 10
             this.defense = 5
             this.speed = 5
         } else if (this.rarity == 'rare') {
             this.health = 150
+            this.baseHealth = 150
             this.attack = 15
             this.defense = 7
             this.speed = 7
         } else if (this.rarity == 'epic') {
             this.health = 200
+            this.baseHealth = 200
             this.attack = 20
             this.defense = 10
             this.speed = 10
         } else if (this.rarity == 'legendary') {
             this.health = 250
+            this.baseHealth = 250
             this.attack = 25
             this.defense = 15
             this.speed = 15
@@ -86,8 +91,30 @@ class Hero extends Actor {
         return name
     }
 
-    Attack() {
-        console.log('attacking')
+    Attack(Tower) {
+        if (this.attackStopper > 0) {
+            this.attackStopper -= this.speed
+        } else {
+            console.log('attacking')
+            this.enemy.health -= this.attack
+            this.attackStopper = 180
+        }
+
+        // if enemy health is 0 remove enemy
+        if (this.enemy.health <= 0) {
+            console.log('enemy defeated')
+            this.game.currentScene.remove(this.enemy)
+            // check if there are any enemies left
+            // else afterBattle()
+            Tower.afterBattle('Enemy defeated')
+        }
+    }
+
+    Move() {
+        // get enemy pos and move 1px towards it
+        this.pos = this.pos.add(this.enemy.pos.sub(this.pos).normalize())
+
+        this.enemyDist = this.pos.distance(this.enemy.pos)
     }
 
     Train() {
@@ -102,7 +129,7 @@ class Hero extends Actor {
     }
 
     onPostUpdate() {
-        console.log(this.game.currentScene.name)
+        // console.log(this.game.currentScene.name)
         if (this.game.currentScene.name == 'Town') {
             if (this.pos.distance(this.destination) < 5) { // If the hero is close to the destination
                 this.setRandomDestination();
