@@ -66,6 +66,27 @@ class Hero extends Character {
 
         // this.super.healthBar()
         this.HealthBar()
+
+        const animation = new Animation({
+            frames: [
+                {
+                    graphic: newSprite,
+                    duration: 500,
+                },
+                {
+                    graphic: circle,
+                    duration: 1000,
+                },
+                {
+                    graphic: rect,
+                    duration: 1500,
+                },
+                {
+                    graphic: triangle,
+                    duration: 2000,
+                },
+            ],
+        });
     }
 
     getRarity() {
