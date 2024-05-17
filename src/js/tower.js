@@ -38,14 +38,14 @@ class Tower extends Scene {
         console.log('Tower scene activated')
 
         this.hero = this.game.heroes[0]
-        this.hero.pos = new Vector(56, 128)
+        this.hero.pos = new Vector(288, 900)
         this.hero.enemyDist = 100
         // this.hero.healthBar()
         this.add(this.hero)
 
 
-        this.enemy.graphics.use(Resources.Enemy.toSprite())
-        this.enemy.pos = new Vector(88, 128)
+        // this.enemy.graphics.use(Resources.Enemy.toSprite())
+        this.enemy.pos = new Vector(288, 300)
         this.add(this.enemy)
 
         // get all heroes and enemies in a array sorted by speed
@@ -66,14 +66,15 @@ class Tower extends Scene {
             width: 20,
             height: 5,
             z: 100,
-            pos: new Vector(72, 200),
+            pos: new Vector(288, 1100),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 8,
+                    size: 32,
                     baseAlign: BaseAlign.Middle,
-                    textAlign: TextAlign.Center
+                    textAlign: TextAlign.Center,
+                    bold: true
                 })
         });
         this.button.on('pointerdown', () => {

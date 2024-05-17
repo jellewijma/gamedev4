@@ -15,13 +15,13 @@ export class Game extends Engine {
 
     constructor() {
         super({
-            width: 144,
-            height: 256,
+            width: 576,
+            height: 1344,
             pixelArt: true,
             maxFps: 30,
             displayMode: DisplayMode.FitScreen,
             antialiasing: false,
-            pixelRatio: 16,
+            // pixelRatio: 16,
         })
         this.start(ResourceLoader).then(() => this.startGame())
         const town = new Town(this)
@@ -65,17 +65,18 @@ export class Game extends Engine {
     showCoins() {
         const showCoins = new Label({
             text: `Coins: ${this.coins}`,
-            width: 20,
-            height: 5,
+            width: 64,
+            height: 32,
             z: 100,
-            pos: new Vector(20, 10),
+            pos: new Vector(80, 32),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 8,
+                    size: 32,
                     baseAlign: BaseAlign.Middle,
-                    textAlign: TextAlign.Center
+                    textAlign: TextAlign.Center,
+                    bold: true
                 })
         });
         this.add(showCoins)

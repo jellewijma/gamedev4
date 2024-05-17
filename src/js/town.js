@@ -20,14 +20,15 @@ class Town extends Scene {
             width: 20,
             height: 5,
             z: 100,
-            pos: new Vector(65, 50),
+            pos: new Vector(288, 200),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 8,
+                    size: 32,
                     baseAlign: BaseAlign.Middle,
-                    textAlign: TextAlign.Center
+                    textAlign: TextAlign.Center,
+                    bold: true
                 })
         });
         summeningHeroeButton.on('pointerdown', () => {
@@ -41,14 +42,15 @@ class Town extends Scene {
             width: 20,
             height: 5,
             z: 100,
-            pos: new Vector(110, 180),
+            pos: new Vector(288, 900),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 8,
+                    size: 32,
                     baseAlign: BaseAlign.Middle,
-                    textAlign: TextAlign.Center
+                    textAlign: TextAlign.Center,
+                    bold: true
                 })
         });
         goToTowerButton.on('pointerdown', () => {

@@ -26,7 +26,11 @@ class Hero extends Character {
 
     constructor(game) {
         super()
-        this.graphics.use(Resources.Hero.toSprite())
+        // this.graphics.use(Resources.Hero.toSprite())
+        const warriorAnim = Resources.Warrior.getAnimation('Idle')
+        console.log(warriorAnim)
+        // @ts-ignore
+        this.graphics.use(warriorAnim)
         this.pos = new Vector(72, 128)
 
         this.rarity = this.getRarity()
@@ -64,33 +68,7 @@ class Hero extends Character {
 
         this.game = game
 
-        // this.super.healthBar()
         this.HealthBar()
-
-        const animation = new Animation({
-            frames: [
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 500,
-                },
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 1000
-                },
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 1500
-                },
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 2000
-                },
-            ],
-        });
-
-        const sword = new Actor({})
-        sword.graphics.add(animation)
-        this.addChild(sword)
     }
 
     getRarity() {
@@ -154,8 +132,8 @@ class Hero extends Character {
 
 
     setRandomDestination() {
-        this.randomX = this.rand.integer(0, 144);
-        this.randomY = this.rand.integer(0, 256);
+        this.randomX = this.rand.integer(0, 576);
+        this.randomY = this.rand.integer(0, 1344);
         this.destination = new Vector(this.randomX, this.randomY);
     }
 
@@ -166,7 +144,7 @@ class Hero extends Character {
                 this.setRandomDestination();
             } else {
                 const direction = this.destination.sub(this.pos).normalize(); // Get the direction to the destination
-                this.vel = direction.scale(30); // Move the hero in the direction of the destination
+                this.vel = direction.scale(75); // Move the hero in the direction of the destination
             }
         } else {
             this.vel = new Vector(0, 0)

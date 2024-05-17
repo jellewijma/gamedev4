@@ -21,7 +21,10 @@ class Enemy extends Character {
 
     constructor(game) {
         super()
-        this.graphics.use(Resources.Enemy.toSprite())
+        const goblinAnim = Resources.Goblin.getAnimation('Idle')
+        // console.log(goblinAnim)
+        // @ts-ignore
+        this.graphics.use(goblinAnim)
         this.pos = new Vector(72, 128)
 
         // distribute stats based on rarity

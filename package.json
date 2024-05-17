@@ -12,6 +12,7 @@
     "vite-plugin-pwa": "^0.20.0"
   },
   "dependencies": {
+    "@excaliburjs/plugin-aseprite": "^0.29.0",
     "@excaliburjs/plugin-spritefusion": "^0.29.0",
     "@excaliburjs/plugin-tiled": "0.29.2",
     "excalibur": "^0.29.2"
