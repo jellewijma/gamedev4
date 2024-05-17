@@ -15,7 +15,7 @@ export default {
                         "type": "image/png"
                     }
                 ],
-                "start_url": "http://jellewijma.github.io/gamedev4/index.html",
+                "start_url": "https://jellewijma.github.io/gamedev4/index.html",
                 "display": "fullscreen"
             }
         })
