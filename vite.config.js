@@ -17,7 +17,6 @@ export default {
                 ],
                 "start_url": "http://jellewijma.github.io/gamedev4/index.html",
                 "display": "fullscreen"
-
             }
         })
     ]
