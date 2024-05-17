@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label } from "excalibur"
+import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, Animation } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Character } from './character.js'
 
@@ -70,23 +70,27 @@ class Hero extends Character {
         const animation = new Animation({
             frames: [
                 {
-                    graphic: newSprite,
+                    graphic: Resources.Sword.toSprite(),
                     duration: 500,
                 },
                 {
-                    graphic: circle,
-                    duration: 1000,
+                    graphic: Resources.Sword.toSprite(),
+                    duration: 1000
                 },
                 {
-                    graphic: rect,
-                    duration: 1500,
+                    graphic: Resources.Sword.toSprite(),
+                    duration: 1500
                 },
                 {
-                    graphic: triangle,
-                    duration: 2000,
+                    graphic: Resources.Sword.toSprite(),
+                    duration: 2000
                 },
             ],
         });
+
+        const sword = new Actor({})
+        sword.graphics.add(animation)
+        this.addChild(sword)
     }
 
     getRarity() {

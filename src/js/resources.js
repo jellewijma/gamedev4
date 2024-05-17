@@ -18,6 +18,7 @@ const Resources = {
         mapPath: './map/tower/map.json',
         spritesheetPath: './map/tower/spritesheet.png'
     }),
+    Sword: new ImageSource('images/sword.png'),
 }
 
 console.log(Resources)
@@ -27,7 +28,8 @@ const ResourceLoader = new Loader([
     Resources.Enemy,
     Resources.TileMap,
     Resources.Town,
-    Resources.Tower
+    Resources.Tower,
+    Resources.Sword
 ])
 
 export { Resources, ResourceLoader }
