@@ -10,17 +10,12 @@ export default {
                 "description": "Pick me up is a rpg game",
                 "icons": [
                     {
-                        "src": "img/logo-s.png",
-                        "sizes": "32x32",
-                        "type": "image/png"
-                    },
-                    {
-                        "src": "img/logo-l.png",
+                        "src": "assets/logo.png",
                         "sizes": "512x512",
                         "type": "image/png"
                     }
                 ],
-                "start_url": "https://jellewijma.github.io/gamedev4",
+                "start_url": "http://jellewijma.github.io/gamedev4/index.html",
                 "display": "fullscreen"
 
             }
