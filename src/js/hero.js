@@ -23,15 +23,28 @@ class Hero extends Character {
     healthBar
     HBbg
 
+    Run
+    Attack_up
+    Attack_down
+    Attack_left
 
     constructor(game) {
         super()
-        // this.graphics.use(Resources.Hero.toSprite())
-        const warriorAnim = Resources.Warrior.getAnimation('Idle')
-        console.log(warriorAnim)
+
+
+        const Idle = Resources.Warrior.getAnimation('Idle')
+        this.Run = Resources.Warrior.getAnimation('Run')
+        this.Attack_up = Resources.Warrior.getAnimation('Up')
+        this.Attack_down = Resources.Warrior.getAnimation('Down')
+        this.Attack_left = Resources.Warrior.getAnimation('Front')
         // @ts-ignore
-        this.graphics.use(warriorAnim)
-        this.pos = new Vector(72, 128)
+        this.Attack_left.flipHorizontal = true
+        // @ts-ignore
+        const Attack_right = Resources.Warrior.getAnimation('Front')
+        // @ts-ignore
+        this.graphics.use(Idle)
+        this.pos = new Vector(288, 400)
+        this.z = 10
 
         this.rarity = this.getRarity()
         // distribute stats based on rarity
@@ -105,6 +118,31 @@ class Hero extends Character {
             this.attackStopper -= this.speed
         } else {
             console.log('attacking')
+
+            if (this.enemy.pos.y > this.pos.y) {
+                // up
+                // @ts-ignore
+                this.graphics.use(this.Attack_up)
+            }
+
+            if (this.enemy.pos.y < this.pos.y) {
+                // down
+                // @ts-ignore
+                this.graphics.use(this.Attack_down)
+            }
+
+            if (this.enemy.pos.x > this.pos.x) {
+                // right
+                // @ts-ignore
+                this.graphics.use(this.Attack_right)
+            }
+
+            if (this.enemy.pos.x < this.pos.x) {
+                // left
+                // @ts-ignore
+                this.graphics.use(this.Attack_left)
+            }
+
             this.enemy.health -= this.attack
             this.attackStopper = 180
         }
