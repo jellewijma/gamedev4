@@ -23,11 +23,28 @@ class Hero extends Character {
     healthBar
     HBbg
 
+    Run
+    Attack_up
+    Attack_down
+    Attack_left
 
     constructor(game) {
         super()
-        this.graphics.use(Resources.Hero.toSprite())
-        this.pos = new Vector(72, 128)
+
+
+        const Idle = Resources.Warrior.getAnimation('Idle')
+        this.Run = Resources.Warrior.getAnimation('Run')
+        this.Attack_up = Resources.Warrior.getAnimation('Up')
+        this.Attack_down = Resources.Warrior.getAnimation('Down')
+        this.Attack_left = Resources.Warrior.getAnimation('Front')
+        // @ts-ignore
+        this.Attack_left.flipHorizontal = true
+        // @ts-ignore
+        const Attack_right = Resources.Warrior.getAnimation('Front')
+        // @ts-ignore
+        this.graphics.use(Idle)
+        this.pos = new Vector(288, 400)
+        this.z = 10
 
         this.rarity = this.getRarity()
         // distribute stats based on rarity
@@ -64,33 +81,7 @@ class Hero extends Character {
 
         this.game = game
 
-        // this.super.healthBar()
         this.HealthBar()
-
-        const animation = new Animation({
-            frames: [
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 500,
-                },
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 1000
-                },
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 1500
-                },
-                {
-                    graphic: Resources.Sword.toSprite(),
-                    duration: 2000
-                },
-            ],
-        });
-
-        const sword = new Actor({})
-        sword.graphics.add(animation)
-        this.addChild(sword)
     }
 
     getRarity() {
@@ -127,6 +118,31 @@ class Hero extends Character {
             this.attackStopper -= this.speed
         } else {
             console.log('attacking')
+
+            if (this.enemy.pos.y > this.pos.y) {
+                // up
+                // @ts-ignore
+                // this.graphics.use(this.Attack_up)
+            }
+
+            if (this.enemy.pos.y < this.pos.y) {
+                // down
+                // @ts-ignore
+                // this.graphics.use(this.Attack_down)
+            }
+
+            if (this.enemy.pos.x > this.pos.x) {
+                // right
+                // @ts-ignore
+                // this.graphics.use(this.Attack_right)
+            }
+
+            if (this.enemy.pos.x < this.pos.x) {
+                // left
+                // @ts-ignore
+                // this.graphics.use(this.Attack_left)
+            }
+
             this.enemy.health -= this.attack
             this.attackStopper = 180
         }
@@ -142,20 +158,22 @@ class Hero extends Character {
     }
 
     Move() {
-        // get enemy pos and move 1px towards it
-        this.pos = this.pos.add(this.enemy.pos.sub(this.pos).normalize())
+        // get enemy pos and move 2px towards it
+        const direction = this.enemy.pos.sub(this.pos).normalize();
+        const distance = 3; // Change this value to adjust the distance
+        this.pos = this.pos.add(direction.scale(distance));
 
-        this.enemyDist = this.pos.distance(this.enemy.pos)
+        this.enemyDist = this.pos.distance(this.enemy.pos);
     }
 
     Train() {
-        console.log('training')
+        console.log('training');
     }
 
 
     setRandomDestination() {
-        this.randomX = this.rand.integer(0, 144);
-        this.randomY = this.rand.integer(0, 256);
+        this.randomX = this.rand.integer(0, 576);
+        this.randomY = this.rand.integer(0, 1344);
         this.destination = new Vector(this.randomX, this.randomY);
     }
 
@@ -166,7 +184,7 @@ class Hero extends Character {
                 this.setRandomDestination();
             } else {
                 const direction = this.destination.sub(this.pos).normalize(); // Get the direction to the destination
-                this.vel = direction.scale(30); // Move the hero in the direction of the destination
+                this.vel = direction.scale(75); // Move the hero in the direction of the destination
             }
         } else {
             this.vel = new Vector(0, 0)
@@ -185,19 +203,21 @@ class Hero extends Character {
         }
 
         this.HBbg = new Actor({
-            width: 16,
-            height: 2,
+            width: 32,
+            height: 4,
             x: 0,
-            y: -10,
+            y: -32,
+            z: 10,
             color: Color.Black
         })
 
         // create a health bar
         this.healthBar = new Actor({
-            width: this.health / this.baseHealth * 16,
-            height: 2,
-            x: -8,
-            y: -10,
+            width: this.health / this.baseHealth * 32,
+            height: 4,
+            x: -16,
+            y: -32,
+            z: 10,
             color: Color.Red,
             anchor: vec(0, 0.5)
         })

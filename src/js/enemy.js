@@ -21,7 +21,10 @@ class Enemy extends Character {
 
     constructor(game) {
         super()
-        this.graphics.use(Resources.Enemy.toSprite())
+        const goblinAnim = Resources.Goblin.getAnimation('Idle')
+        // console.log(goblinAnim)
+        // @ts-ignore
+        this.graphics.use(goblinAnim)
         this.pos = new Vector(72, 128)
 
         // distribute stats based on rarity
@@ -73,7 +76,10 @@ class Enemy extends Character {
     }
 
     Move() {
-        this.pos = this.pos.add(this.enemy.pos.sub(this.pos).normalize())
+        // get enemy pos and move 2px towards it
+        const direction = this.enemy.pos.sub(this.pos).normalize();
+        const distance = 3; // Change this value to adjust the distance
+        this.pos = this.pos.add(direction.scale(distance));
 
         this.enemyDist = this.pos.distance(this.enemy.pos)
 
@@ -91,19 +97,19 @@ class Enemy extends Character {
         }
 
         this.HBbg = new Actor({
-            width: 16,
-            height: 2,
+            width: 32,
+            height: 4,
             x: 0,
-            y: -10,
+            y: -32,
             color: Color.Black
         })
 
         // create a health bar
         this.healthBar = new Actor({
-            width: this.health / this.baseHealth * 16,
-            height: 2,
-            x: -8,
-            y: -10,
+            width: this.health / this.baseHealth * 32,
+            height: 4,
+            x: -16,
+            y: -32,
             color: Color.Red,
             anchor: vec(0, 0.5)
         })
