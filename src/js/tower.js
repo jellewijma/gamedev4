@@ -140,7 +140,7 @@ class Tower extends Scene {
     onPostUpdate() {
         if (this.battle == true) {
             this.characters.forEach(character => {
-                if (character.enemyDist < 20) {
+                if (character.enemyDist < 64) {
                     character.Attack(this)
                 } else {
                     character.Move()

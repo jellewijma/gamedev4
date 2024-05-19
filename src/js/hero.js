@@ -122,25 +122,25 @@ class Hero extends Character {
             if (this.enemy.pos.y > this.pos.y) {
                 // up
                 // @ts-ignore
-                this.graphics.use(this.Attack_up)
+                // this.graphics.use(this.Attack_up)
             }
 
             if (this.enemy.pos.y < this.pos.y) {
                 // down
                 // @ts-ignore
-                this.graphics.use(this.Attack_down)
+                // this.graphics.use(this.Attack_down)
             }
 
             if (this.enemy.pos.x > this.pos.x) {
                 // right
                 // @ts-ignore
-                this.graphics.use(this.Attack_right)
+                // this.graphics.use(this.Attack_right)
             }
 
             if (this.enemy.pos.x < this.pos.x) {
                 // left
                 // @ts-ignore
-                this.graphics.use(this.Attack_left)
+                // this.graphics.use(this.Attack_left)
             }
 
             this.enemy.health -= this.attack
@@ -158,14 +158,16 @@ class Hero extends Character {
     }
 
     Move() {
-        // get enemy pos and move 1px towards it
-        this.pos = this.pos.add(this.enemy.pos.sub(this.pos).normalize())
+        // get enemy pos and move 2px towards it
+        const direction = this.enemy.pos.sub(this.pos).normalize();
+        const distance = 3; // Change this value to adjust the distance
+        this.pos = this.pos.add(direction.scale(distance));
 
-        this.enemyDist = this.pos.distance(this.enemy.pos)
+        this.enemyDist = this.pos.distance(this.enemy.pos);
     }
 
     Train() {
-        console.log('training')
+        console.log('training');
     }
 
 
@@ -201,19 +203,21 @@ class Hero extends Character {
         }
 
         this.HBbg = new Actor({
-            width: 16,
-            height: 2,
+            width: 32,
+            height: 4,
             x: 0,
-            y: -10,
+            y: -32,
+            z: 10,
             color: Color.Black
         })
 
         // create a health bar
         this.healthBar = new Actor({
-            width: this.health / this.baseHealth * 16,
-            height: 2,
-            x: -8,
-            y: -10,
+            width: this.health / this.baseHealth * 32,
+            height: 4,
+            x: -16,
+            y: -32,
+            z: 10,
             color: Color.Red,
             anchor: vec(0, 0.5)
         })
