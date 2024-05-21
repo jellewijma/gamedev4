@@ -90,19 +90,22 @@ class Tower extends Scene {
         // remove old button
         this.remove(this.button)
 
+        this.hero.graphics.use(Resources.Warrior.getAnimation('Idle'))
+
         const messageLable = new Label({
             text: message,
             width: 20,
             height: 5,
             z: 100,
-            pos: new Vector(72, 100),
+            pos: new Vector(288, 400),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 8,
+                    size: 32,
                     baseAlign: BaseAlign.Middle,
-                    textAlign: TextAlign.Center
+                    textAlign: TextAlign.Center,
+                    bold: true
                 })
         });
         this.add(messageLable)
@@ -114,14 +117,15 @@ class Tower extends Scene {
             width: 20,
             height: 5,
             z: 100,
-            pos: new Vector(72, 200),
+            pos: new Vector(288, 1100),
             anchor: new Vector(0.5, 0.5),
             color: Color.White,
             font: new Font(
                 {
-                    size: 8,
+                    size: 32,
                     baseAlign: BaseAlign.Middle,
-                    textAlign: TextAlign.Center
+                    textAlign: TextAlign.Center,
+                    bold: true
                 })
         });
         button.on('pointerdown', () => {

@@ -27,22 +27,32 @@ class Hero extends Character {
     Attack_up
     Attack_down
     Attack_left
+    Attack_right
+    Idle
 
     constructor(game) {
         super()
 
 
-        const Idle = Resources.Warrior.getAnimation('Idle')
+        this.Idle = Resources.Warrior.getAnimation('Idle')
         this.Run = Resources.Warrior.getAnimation('Run')
         this.Attack_up = Resources.Warrior.getAnimation('Up')
+        // @ts-ignore
+        this.Attack_up.loop = false
         this.Attack_down = Resources.Warrior.getAnimation('Down')
+        // @ts-ignore
+        this.Attack_down.loop = false
         this.Attack_left = Resources.Warrior.getAnimation('Front')
+        // @ts-ignore
+        this.Attack_left.loop = false
         // @ts-ignore
         this.Attack_left.flipHorizontal = true
         // @ts-ignore
-        const Attack_right = Resources.Warrior.getAnimation('Front')
+        this.Attack_right = Resources.Warrior.getAnimation('Front')
         // @ts-ignore
-        this.graphics.use(Idle)
+        this.Attack_right.loop = false
+        // @ts-ignore
+        this.graphics.use(this.Idle)
         this.pos = new Vector(288, 400)
         this.z = 10
 
@@ -114,33 +124,42 @@ class Hero extends Character {
     }
 
     Attack(Tower) {
+        // console.log(this.graphics.totalDuration())
         if (this.attackStopper > 0) {
             this.attackStopper -= this.speed
         } else {
             console.log('attacking')
 
-            if (this.enemy.pos.y > this.pos.y) {
+            if (this.enemy.pos.y < this.pos.y) {
                 // up
                 // @ts-ignore
-                // this.graphics.use(this.Attack_up)
+                this.graphics.use(this.Attack_up)
+                // @ts-ignore
+                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
             }
 
-            if (this.enemy.pos.y < this.pos.y) {
+            if (this.enemy.pos.y > this.pos.y) {
                 // down
                 // @ts-ignore
-                // this.graphics.use(this.Attack_down)
+                this.graphics.use(this.Attack_down)
+                // @ts-ignore
+                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
             }
 
             if (this.enemy.pos.x > this.pos.x) {
                 // right
                 // @ts-ignore
-                // this.graphics.use(this.Attack_right)
+                this.graphics.use(this.Attack_right)
+                // @ts-ignore
+                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
             }
 
             if (this.enemy.pos.x < this.pos.x) {
                 // left
                 // @ts-ignore
-                // this.graphics.use(this.Attack_left)
+                this.graphics.use(this.Attack_left)
+                // @ts-ignore
+                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
             }
 
             this.enemy.health -= this.attack
