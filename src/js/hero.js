@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, Animation } from "excalibur"
+import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, Animation, Circle, Collider, CollisionType, Shape } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Character } from './character.js'
 
@@ -29,6 +29,11 @@ class Hero extends Character {
     Attack_left
     Attack_right
     Idle
+
+    animation = Animation
+
+
+    // collider
 
     constructor(game) {
         super()
@@ -92,6 +97,11 @@ class Hero extends Character {
         this.game = game
 
         this.HealthBar()
+
+        this.body.collisionType = CollisionType.Passive
+        const customHitbox = Shape.Box(100, 100, new Vector(10, 10)) // width, height, offset
+        this.collider.set(customHitbox)
+
     }
 
     getRarity() {
@@ -211,6 +221,8 @@ class Hero extends Character {
 
         // update health bar
         this.HealthBar()
+
+        console.log(this.animation)
 
     }
 
