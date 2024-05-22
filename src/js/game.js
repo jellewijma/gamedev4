@@ -20,8 +20,7 @@ export class Game extends Engine {
             pixelArt: true,
             maxFps: 30,
             displayMode: DisplayMode.FitScreen,
-            antialiasing: false,
-            // pixelRatio: 16,
+            antialiasing: false
         })
         this.start(ResourceLoader).then(() => this.startGame())
         const town = new Town(this)

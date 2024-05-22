@@ -2,203 +2,179 @@ import '../css/style.css'
 import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, Animation, Circle, Collider, CollisionType, Shape } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Character } from './character.js'
+import { Placeholder } from './placeholder.js'
 
+const ATTACK_STOPPER_INITIAL = 180;
+const RANDOM_SEED = 1234;
+const TOWN_SCENE_NAME = 'Town';
+const BASE_HEALTH_COMMON = 100;
+const BASE_ATTACK_COMMON = 10;
+const BASE_DEFENSE_COMMON = 5;
+const BASE_SPEED_COMMON = 5;
+
+// Note: all functionality and varables are created by me and the formating was done by chatgpt
 
 class Hero extends Character {
-    experience = 0
-    rarity = ''
-    name = 'Hero'
-    type = 'hero'
-    enemy
-    enemyDist
+    experience = 0;
+    rarity = '';
+    name = 'Hero';
+    type = 'hero';
+    role = 'swordsman';
+    enemy;
+    enemyDist;
+    attackStopper = ATTACK_STOPPER_INITIAL;
+    game;
+    destination;
+    rand = new Random(RANDOM_SEED);
+    randomX;
+    randomY;
+    healthBar;
+    HBbg;
+    Run;
+    Attack_up;
+    Attack_down;
+    Attack_left;
+    Attack_right;
+    Idle;
+    animation = Animation;
 
-    attackStopper = 180
-
-    game
-    destination
-    rand = new Random();
-    randomX
-    randomY
-
-    healthBar
-    HBbg
-
-    Run
-    Attack_up
-    Attack_down
-    Attack_left
-    Attack_right
-    Idle
-
-    animation = Animation
-
-
-    // collider
+    // new
+    viewRange
 
     constructor(game) {
-        super()
+        super();
+        this.game = game;
 
+        this.setupAnimations();
+        this.pos = new Vector(288, 400);
+        this.z = 10;
 
-        this.Idle = Resources.Warrior.getAnimation('Idle')
-        this.Run = Resources.Warrior.getAnimation('Run')
-        this.Attack_up = Resources.Warrior.getAnimation('Up')
-        // @ts-ignore
-        this.Attack_up.loop = false
-        this.Attack_down = Resources.Warrior.getAnimation('Down')
-        // @ts-ignore
-        this.Attack_down.loop = false
-        this.Attack_left = Resources.Warrior.getAnimation('Front')
-        // @ts-ignore
-        this.Attack_left.loop = false
-        // @ts-ignore
-        this.Attack_left.flipHorizontal = true
-        // @ts-ignore
-        this.Attack_right = Resources.Warrior.getAnimation('Front')
-        // @ts-ignore
-        this.Attack_right.loop = false
-        // @ts-ignore
-        this.graphics.use(this.Idle)
-        this.pos = new Vector(288, 400)
-        this.z = 10
+        this.rarity = this.getRarity();
+        this.setupStatsBasedOnRarity();
+        this.name = this.getName();
+        this.setRandomDestination();
+        this.setupCustomHitbox();
+        this.HealthBar();
+    }
 
-        this.rarity = this.getRarity()
-        // distribute stats based on rarity
-        if (this.rarity == 'common') {
-            this.health = 100
-            this.baseHealth = 100
-            this.attack = 10
-            this.defense = 5
-            this.speed = 5
-        } else if (this.rarity == 'rare') {
-            this.health = 150
-            this.baseHealth = 150
-            this.attack = 15
-            this.defense = 7
-            this.speed = 7
-        } else if (this.rarity == 'epic') {
-            this.health = 200
-            this.baseHealth = 200
-            this.attack = 20
-            this.defense = 10
-            this.speed = 10
-        } else if (this.rarity == 'legendary') {
-            this.health = 250
-            this.baseHealth = 250
-            this.attack = 25
-            this.defense = 15
-            this.speed = 15
-        }
-        // randomize name
-        const rand = new Random(1234)
-        this.name = this.getName()
+    setupAnimations() {
+        this.Idle = Resources.Warrior.getAnimation('Idle');
+        this.Run = Resources.Warrior.getAnimation('Run');
+        this.Attack_up = this.setupNonLoopingAnimation('Up');
+        this.Attack_down = this.setupNonLoopingAnimation('Down');
+        this.Attack_left = this.setupFlippedAnimation('Front', true);
+        this.Attack_right = this.setupNonLoopingAnimation('Front');
+        this.graphics.use(this.Idle);
+    }
 
-        this.setRandomDestination()
+    setupNonLoopingAnimation(animationName) {
+        const animation = Resources.Warrior.getAnimation(animationName);
+        //@ts-ignore
+        animation.loop = false;
+        return animation;
+    }
 
-        this.game = game
+    setupFlippedAnimation(animationName, flipHorizontal) {
+        const animation = this.setupNonLoopingAnimation(animationName);
+        //@ts-ignore
+        animation.flipHorizontal = flipHorizontal;
+        return animation;
+    }
 
-        this.HealthBar()
-
-        this.body.collisionType = CollisionType.Passive
-        const customHitbox = Shape.Box(100, 100, new Vector(10, 10)) // width, height, offset
-        this.collider.set(customHitbox)
-
+    setupCustomHitbox() {
+        // const customHitbox = Shape.Box(64, 64);
+        // this.collider.set(customHitbox);
+        const bodyCollider = new Placeholder('Active', 'square');
+        const viewRange = new Placeholder('Passive', 'cross');
+        this.addChild(bodyCollider);
+        this.addChild(viewRange);
     }
 
     getRarity() {
-        const rand = new Random(1234)
-        var rarity = rand.integer(1, 100)
-        if (rarity <= 5) {
-            this.rarity = 'legendary'
-        } else if (rarity <= 15) {
-            this.rarity = 'epic'
-        } else if (rarity <= 40) {
-            this.rarity = 'rare'
-        } else {
-            this.rarity = 'common'
+        const rarityValue = this.rand.integer(1, 100);
+        if (rarityValue <= 5) return 'legendary';
+        if (rarityValue <= 15) return 'epic';
+        if (rarityValue <= 40) return 'rare';
+        return 'common';
+    }
+
+    setupStatsBasedOnRarity() {
+        switch (this.rarity) {
+            case 'common':
+                this.setStats(BASE_HEALTH_COMMON, BASE_ATTACK_COMMON, BASE_DEFENSE_COMMON, BASE_SPEED_COMMON);
+                break;
+            case 'rare':
+                this.setStats(150, 15, 7, 7);
+                break;
+            case 'epic':
+                this.setStats(200, 20, 10, 10);
+                break;
+            case 'legendary':
+                this.setStats(250, 25, 15, 15);
+                break;
         }
-        return this.rarity
+    }
+
+    setStats(health, attack, defense, speed) {
+        this.health = health;
+        this.baseHealth = health;
+        this.attack = attack;
+        this.defense = defense;
+        this.speed = speed;
     }
 
     getName() {
-        var name = ''
-        if (this.rarity == 'common') {
-            name = Resources.CommonNames[this.rand.integer(0, Resources.CommonNames.length - 1)]
-        } else if (this.rarity == 'rare') {
-            name = Resources.RareNames[this.rand.integer(0, Resources.RareNames.length - 1)]
-        } else if (this.rarity == 'epic') {
-            name = Resources.EpicNames[this.rand.integer(0, Resources.EpicNames.length - 1)]
-        } else if (this.rarity == 'legendary') {
-            name = Resources.LegendaryNames[this.rand.integer(0, Resources.LegendaryNames.length - 1)]
+        switch (this.rarity) {
+            case 'common':
+                return Resources.CommonNames[this.rand.integer(0, Resources.CommonNames.length - 1)];
+            case 'rare':
+                return Resources.RareNames[this.rand.integer(0, Resources.RareNames.length - 1)];
+            case 'epic':
+                return Resources.EpicNames[this.rand.integer(0, Resources.EpicNames.length - 1)];
+            case 'legendary':
+                return Resources.LegendaryNames[this.rand.integer(0, Resources.LegendaryNames.length - 1)];
+            default:
+                return '';
         }
-        return name
     }
 
     Attack(Tower) {
-        // console.log(this.graphics.totalDuration())
         if (this.attackStopper > 0) {
-            this.attackStopper -= this.speed
+            this.attackStopper -= this.speed;
         } else {
-            console.log('attacking')
-
-            if (this.enemy.pos.y < this.pos.y) {
-                // up
-                // @ts-ignore
-                this.graphics.use(this.Attack_up)
-                // @ts-ignore
-                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
-            }
-
-            if (this.enemy.pos.y > this.pos.y) {
-                // down
-                // @ts-ignore
-                this.graphics.use(this.Attack_down)
-                // @ts-ignore
-                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
-            }
-
-            if (this.enemy.pos.x > this.pos.x) {
-                // right
-                // @ts-ignore
-                this.graphics.use(this.Attack_right)
-                // @ts-ignore
-                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
-            }
-
-            if (this.enemy.pos.x < this.pos.x) {
-                // left
-                // @ts-ignore
-                this.graphics.use(this.Attack_left)
-                // @ts-ignore
-                // this.graphics.onPostDraw.call(this.graphics.use(this.Idle))
-            }
-
-            this.enemy.health -= this.attack
-            this.attackStopper = 180
+            this.performAttackAnimation();
+            this.enemy.health -= this.attack;
+            this.attackStopper = ATTACK_STOPPER_INITIAL;
         }
 
-        // if enemy health is 0 remove enemy
         if (this.enemy.health <= 0) {
-            console.log('enemy defeated')
-            this.game.currentScene.remove(this.enemy)
-            // check if there are any enemies left
-            // else afterBattle()
-            Tower.afterBattle('Enemy defeated')
+            this.handleEnemyDefeat(Tower);
         }
     }
 
-    Move() {
-        // get enemy pos and move 2px towards it
-        const direction = this.enemy.pos.sub(this.pos).normalize();
-        const distance = 3; // Change this value to adjust the distance
-        this.pos = this.pos.add(direction.scale(distance));
+    performAttackAnimation() {
+        if (this.enemy.pos.y < this.pos.y) this.graphics.use(this.Attack_up);
+        else if (this.enemy.pos.y > this.pos.y) this.graphics.use(this.Attack_down);
+        else if (this.enemy.pos.x > this.pos.x) this.graphics.use(this.Attack_right);
+        else if (this.enemy.pos.x < this.pos.x) this.graphics.use(this.Attack_left);
+    }
 
+    handleEnemyDefeat(Tower) {
+        console.log('enemy defeated');
+        this.game.currentScene.remove(this.enemy);
+        Tower.afterBattle('Enemy defeated');
+    }
+
+    Move() {
+        const direction = this.enemy.pos.sub(this.pos).normalize();
+        const distance = 3;
+        this.pos = this.pos.add(direction.scale(distance));
         this.enemyDist = this.pos.distance(this.enemy.pos);
     }
 
     Train() {
         console.log('training');
     }
-
 
     setRandomDestination() {
         this.randomX = this.rand.integer(0, 576);
@@ -207,43 +183,49 @@ class Hero extends Character {
     }
 
     onPostUpdate() {
-        // console.log(this.game.currentScene.name)
-        if (this.game.currentScene.name == 'Town') {
-            if (this.pos.distance(this.destination) < 5) { // If the hero is close to the destination
-                this.setRandomDestination();
-            } else {
-                const direction = this.destination.sub(this.pos).normalize(); // Get the direction to the destination
-                this.vel = direction.scale(75); // Move the hero in the direction of the destination
-            }
+        if (this.game.currentScene.name === TOWN_SCENE_NAME) {
+            this.updatePositionInTown();
         } else {
-            this.vel = new Vector(0, 0)
+            this.vel = new Vector(0, 0);
         }
+        this.HealthBar();
+    }
 
-        // update health bar
-        this.HealthBar()
-
-        console.log(this.animation)
-
+    updatePositionInTown() {
+        if (this.pos.distance(this.destination) < 5) {
+            this.setRandomDestination();
+        } else {
+            const direction = this.destination.sub(this.pos).normalize();
+            this.vel = direction.scale(75);
+        }
     }
 
     HealthBar() {
-        if (this.healthBar != undefined) {
-
-            this.removeChild(this.healthBar)
-            this.removeChild(this.HBbg)
+        if (this.healthBar) {
+            this.removeChild(this.healthBar);
+            this.removeChild(this.HBbg);
         }
 
-        this.HBbg = new Actor({
+        this.HBbg = this.createHealthBarBackground();
+        this.healthBar = this.createHealthBar();
+
+        this.addChild(this.HBbg);
+        this.addChild(this.healthBar);
+    }
+
+    createHealthBarBackground() {
+        return new Actor({
             width: 32,
             height: 4,
             x: 0,
             y: -32,
             z: 10,
             color: Color.Black
-        })
+        });
+    }
 
-        // create a health bar
-        this.healthBar = new Actor({
+    createHealthBar() {
+        return new Actor({
             width: this.health / this.baseHealth * 32,
             height: 4,
             x: -16,
@@ -251,10 +233,8 @@ class Hero extends Character {
             z: 10,
             color: Color.Red,
             anchor: vec(0, 0.5)
-        })
-        this.addChild(this.HBbg)
-        this.addChild(this.healthBar)
-
+        });
     }
 }
+
 export { Hero }
