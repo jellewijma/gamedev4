@@ -29,7 +29,7 @@ export class Game extends Engine {
         const tower = new Tower(this)
         this.add('tower', tower)
 
-        this.coins = 1
+        this.coins = 5
     }
 
     startGame() {
@@ -41,6 +41,9 @@ export class Game extends Engine {
         if (this.coins < 1) {
             return
         }
+
+        // (this.coins < 1) ? return : true
+
         this.coins -= 1
         console.log(this.coins)
         // update coins label

@@ -45,6 +45,11 @@ class Placeholder extends Actor {
         this.collider.set(this.colliderShape);
     }
 
+    onCollisionStart() {
+        // console.log('collision')
+        // console.log(this)
+    }
+
 }
 
 export { Placeholder }

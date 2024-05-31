@@ -11,18 +11,10 @@ const Resources = {
     RareNames: ['Aerendyl', 'Thalassius', 'Elyssandra', 'Morvain', 'Seraphiel', 'Drystan', 'Elowyn', 'Thalwynn', 'Isolindra', 'Galadron'],
     EpicNames: ['Valarian the Brave', 'Elowyn Stormblade', 'Draven Darkheart', 'Aeliana Silvermoon', 'Ragnar Ironfist', 'Seraphina Dawnbringer', 'Galadriel Starfire', 'Thorne Shadowalker', 'Isolde Frostbane', 'Aric Blackthorn'],
     LegendaryNames: ['Eldritch the Everlasting', 'Morgana Shadowweaver', 'Aurelius the Undying', 'Celestia Dawnbringer', 'Azrael the Eternal', 'Seraphiel the Radiant', 'Morwynn the Enchanter', 'Drakonius the Dreaded', 'Thalassa the Tempestuous', 'Vaelastrasz the Unyielding'],
-    // Town: new SpriteFusionResource({
-    //     mapPath: './map/town/map.json',
-    //     spritesheetPath: './map/town/spritesheet.png'
-    // }),    
     Town: new SpriteFusionResource({
         mapPath: './map/town2/map.json',
         spritesheetPath: './map/town2/spritesheet.png'
     }),
-    // Tower: new SpriteFusionResource({
-    //     mapPath: './map/tower/map.json',
-    //     spritesheetPath: './map/tower/spritesheet.png'
-    // }),
     Tower: new SpriteFusionResource({
         mapPath: './map/tower2/map.json',
         spritesheetPath: './map/tower2/spritesheet.png'

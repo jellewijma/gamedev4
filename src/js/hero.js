@@ -37,8 +37,7 @@ class Hero extends Character {
     Attack_right;
     Idle;
     animation = Animation;
-
-    // new
+    bodyCollider
     viewRange
 
     constructor(game) {
@@ -52,9 +51,9 @@ class Hero extends Character {
         this.rarity = this.getRarity();
         this.setupStatsBasedOnRarity();
         this.name = this.getName();
-        this.setRandomDestination();
         this.setupCustomHitbox();
         this.HealthBar();
+        this.setRandomDestination();
     }
 
     setupAnimations() {
@@ -84,10 +83,10 @@ class Hero extends Character {
     setupCustomHitbox() {
         // const customHitbox = Shape.Box(64, 64);
         // this.collider.set(customHitbox);
-        const bodyCollider = new Placeholder('Active', 'square');
-        const viewRange = new Placeholder('Passive', 'cross');
-        this.addChild(bodyCollider);
-        this.addChild(viewRange);
+        this.bodyCollider = new Placeholder('Active', 'square');
+        this.viewRange = new Placeholder('Passive', 'cross');
+        this.addChild(this.bodyCollider);
+        this.addChild(this.viewRange);
     }
 
     getRarity() {
@@ -138,6 +137,15 @@ class Hero extends Character {
         }
     }
 
+    fight() {
+        this.viewRange.onCollisionStart()
+        if (this.enemyDist < 64) {
+            this.Attack(this.game.currentScene);
+        } else {
+            this.Move();
+        }
+    }
+
     Attack(Tower) {
         if (this.attackStopper > 0) {
             this.attackStopper -= this.speed;
@@ -148,7 +156,11 @@ class Hero extends Character {
         }
 
         if (this.enemy.health <= 0) {
+            // check if there are any enemies left
+            // if (Tower.characters.length === 5) {
             this.handleEnemyDefeat(Tower);
+            // }
+            // get new enemy
         }
     }
 
@@ -160,7 +172,7 @@ class Hero extends Character {
     }
 
     handleEnemyDefeat(Tower) {
-        console.log('enemy defeated');
+        // console.log('enemy defeated');
         this.game.currentScene.remove(this.enemy);
         Tower.afterBattle('Enemy defeated');
     }
@@ -173,7 +185,7 @@ class Hero extends Character {
     }
 
     Train() {
-        console.log('training');
+        // console.log('training');
     }
 
     setRandomDestination() {

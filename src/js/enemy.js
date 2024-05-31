@@ -122,5 +122,15 @@ class Enemy extends Character {
         // update health bar
         this.HealthBar()
     }
+
+    fight() {
+        // this.viewRange.onCollisionStart()
+        if (this.enemyDist < 64) {
+            this.Attack(this.game.currentScene);
+        } else {
+            this.Move();
+        }
+    }
+
 }
 export { Enemy }
