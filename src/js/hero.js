@@ -60,7 +60,7 @@ class Hero extends Character {
         this.HealthBar();
         this.setRandomDestination();
         this.on('collisionstart', (e) => {
-            console.log(e)
+            // console.log(e)
             if (e.other.name === 'Enemy') {
                 this.inRange = true;
             }
@@ -69,11 +69,17 @@ class Hero extends Character {
 
     setupAnimations() {
         this.Idle = Resources.Warrior.getAnimation('Idle');
+        this.Idle.CollisionType = CollisionType.PreventCollision;
         this.Run = Resources.Warrior.getAnimation('Run');
+        this.Run.CollisionType = CollisionType.PreventCollision;
         this.Attack_up = this.setupNonLoopingAnimation('Up');
+        this.Attack_up.ColliderType = CollisionType.PreventCollision;
         this.Attack_down = this.setupNonLoopingAnimation('Down');
+        this.Attack_down.ColliderType = CollisionType.PreventCollision;
         this.Attack_left = this.setupFlippedAnimation('Front', true);
+        this.Attack_left.ColliderType = CollisionType.PreventCollision;
         this.Attack_right = this.setupNonLoopingAnimation('Front');
+        this.Attack_right.ColliderType = CollisionType.PreventCollision;
         this.graphics.use(this.Idle);
     }
 
@@ -90,16 +96,6 @@ class Hero extends Character {
         animation.flipHorizontal = flipHorizontal;
         return animation;
     }
-
-    // setupCustomHitbox() {
-    //     // const customHitbox = Shape.Box(64, 64);
-    //     // this.collider.set(customHitbox);
-    //     this.bodyCollider = new Placeholder('Fixed', 'square');
-    //     // this.viewRange = new Placeholder('Passive', 'cross');
-    //     this.addChild(this.bodyCollider);
-    //     // this.addChild(this.viewRange);   
-    // }
-
     getRarity() {
         const rarityValue = this.rand.integer(1, 100);
         if (rarityValue <= 5) return 'legendary';
@@ -157,16 +153,17 @@ class Hero extends Character {
     }
 
     Attack(Tower) {
-        console.log('attacking');
-        console.log(this.enemy.health)
+        // console.log('attacking');
+        // console.log(this.enemy.health)
         if (this.attackStopper > 0) {
-            console.log('attack stopper')
+            // console.log('attack stopper')
             this.attackStopper -= this.speed;
         } else {
-            console.log('attacking1')
+            // console.log('attacking1')
             this.performAttackAnimation();
             this.enemy.health -= this.attack;
             this.attackStopper = ATTACK_STOPPER_INITIAL;
+            this.enemy.HealthBar();
         }
 
         if (this.enemy.health <= 0) {
@@ -190,7 +187,7 @@ class Hero extends Character {
     handleEnemyDefeat(Tower) {
         // console.log('enemy defeated');
         this.game.currentScene.remove(this.enemy);
-        console.log('Enemy defeated');
+        // console.log('Enemy defeated');
         Tower.afterBattle('Enemy defeated');
 
     }

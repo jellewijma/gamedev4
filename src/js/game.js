@@ -6,6 +6,7 @@ import { Resources, ResourceLoader } from './resources.js'
 import { Tower } from './tower.js'
 import { Town } from './town.js'
 import { Intro } from './intro.js'
+import { Outro } from './outro.js'
 import { Hero } from './hero.js'
 
 
@@ -33,6 +34,9 @@ export class Game extends Engine {
         const intro = new Intro(this)
         this.add('intro', intro)
 
+        const outro = new Outro(this)
+        this.add('outro', outro)
+
         this.coins = 1
     }
 
@@ -49,7 +53,7 @@ export class Game extends Engine {
         // (this.coins < 1) ? return : true
 
         this.coins -= 1
-        console.log(this.coins)
+        // console.log(this.coins)
         // update coins label
 
         this.currentScene.actors.forEach(actor => {
@@ -60,10 +64,10 @@ export class Game extends Engine {
             }
         })
 
-        console.log('drawing hero')
+        // console.log('drawing hero')
         const hero = new Hero(this)
         this.add(hero)
-        console.log(hero)
+        // console.log(hero)
 
         this.heroes.push(hero)
     }

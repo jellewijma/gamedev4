@@ -13,7 +13,7 @@ class Town extends Scene {
 
         this.game = game
         this.game.pixelArt = true
-        console.log('Town scene created')
+        // console.log('Town scene created')
 
         const summeningHeroeButton = new Label({
             text: "Summon Hero \n (1 coins)",

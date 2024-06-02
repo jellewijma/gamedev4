@@ -31,13 +31,13 @@ class Tower extends Scene {
 
 
         this.characters.forEach(character => {
-            console.log(character)
+            // console.log(character)
             if (character.type == 'hero') {
-                console.log('hero')
+                // console.log('hero')
                 const enemies = this.characters.filter(character => character.type == 'enemy')
                 const closestEnemy = this.rand.pickOne(enemies)
                 enemies.forEach(enemy => {
-                    console.log('here')
+                    // console.log('here')
                     if (closestEnemy.pos.distance(character.pos) <= enemy.pos.distance(character.pos)) {
                         character.enemy = enemy
                         console.log(enemy)
@@ -47,12 +47,12 @@ class Tower extends Scene {
                 const enemies = this.characters.filter(character => character.type == 'hero')
                 const closestEnemy = this.rand.pickOne(enemies)
                 enemies.forEach(enemy => {
-                    console.log('here too')
-                    console.log(enemy.pos.distance(character.pos))
-                    console.log(closestEnemy.pos.distance(character.pos))
+                    // console.log('here too')
+                    // console.log(enemy.pos.distance(character.pos))
+                    // console.log(closestEnemy.pos.distance(character.pos))
                     if (closestEnemy.pos.distance(character.pos) <= enemy.pos.distance(character.pos)) {
                         character.enemy = enemy
-                        console.log(character.enemy)
+                        // console.log(character.enemy)
                     }
                 });
             }
@@ -112,7 +112,7 @@ class Tower extends Scene {
         });
         this.add(this.messageLable)
 
-        console.log('after battle')
+        // console.log('after battle')
         // get button and set it to go back to previous scene
         this.button = new Label({
             text: "Go back to Town",
@@ -133,16 +133,18 @@ class Tower extends Scene {
 
         });
         this.button.on('pointerdown', () => {
-            if (this.level === 10) {
-
+            console.log(this.level)
+            if (this.level === 2) {
+                this.game.goToScene('outro')
             } else {
                 this.game.goToScene('town')
                 this.remove(this.button)
-                console.log('back to game')
+                // console.log('back to game')
                 this.remove(message)
                 this.remove(this.messageLable)
                 this.characters.forEach(character => {
                     character.health = character.baseHealth
+                    this.remove(character)
                 })
             }
         })

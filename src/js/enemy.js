@@ -55,11 +55,13 @@ class Enemy extends Character {
         // this.setupCustomHitbox()
 
         this.on('collisionstart', (e) => {
-            console.log(e)
-            if (e.other.name === 'Hero') {
+            // console.log(e, 'test', e.other.type)
+            if (e.other.type === 'hero') {
+                // console.log('in range Hero')
                 this.inRange = true;
             }
         })
+        this.HealthBar()
     }
 
     getTowerLvl() {
@@ -80,6 +82,7 @@ class Enemy extends Character {
             console.log('attacking')
             this.enemy.health -= this.attack
             this.attackStopper = 180
+            this.enemy.HealthBar();
             // this.enemy.healthBar.width = 1
         }
 

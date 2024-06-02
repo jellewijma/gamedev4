@@ -58,14 +58,14 @@ class Intro extends Scene {
         this.add(this.speachBubble)
         this.add(this.introText)
         this.bg.on('pointerdown', () => {
-            console.log('pointerdown')
+            // console.log('pointerdown')
             // next text
             switch (i) {
                 case 0:
                     this.introText.text = 'After exploring the dungeon,\nyou fell to the bottom of the dungeon.'
                     break;
                 case 1:
-                    this.introText.text = 'To escape, you need to defeat\n10 levels in the dungeon.'
+                    this.introText.text = 'To escape, you need to defeat\nthe dungeon.'
                     break;
                 case 2:
                     this.introText.text = 'Good luck!'
