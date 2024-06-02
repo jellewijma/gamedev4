@@ -37,7 +37,7 @@ export class Game extends Engine {
         const outro = new Outro(this)
         this.add('outro', outro)
 
-        this.coins = 1
+        this.coins = 5
     }
 
     startGame() {

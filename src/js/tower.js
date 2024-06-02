@@ -192,10 +192,12 @@ class Tower extends Scene {
 
     getHeros() {
         this.game.heroes.forEach((hero, i) => {
-            console.log(hero)
-            hero.pos = new Vector(115 * i + 57, 900)
-            this.characters.push(hero)
-            this.add(hero)
+            if (i == 0) {
+                console.log(hero)
+                hero.pos = new Vector(115 * i + 57, 900)
+                this.characters.push(hero)
+                this.add(hero)
+            }
         })
     }
 
