@@ -14,6 +14,7 @@ export class Game extends Engine {
 
     heroes = []
     coins
+    level = 1
 
     constructor() {
         super({

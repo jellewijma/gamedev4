@@ -7,11 +7,13 @@ class Town extends Scene {
     game
     name
     level
+    score
 
     constructor(game) {
         super()
 
         this.game = game
+        this.level = game.level
         this.game.pixelArt = true
         // console.log('Town scene created')
 
@@ -38,6 +40,25 @@ class Town extends Scene {
         })
         this.add(summeningHeroeButton)
 
+        this.score = new Label({
+            text: `Dungeon lvl ${this.game.level}`,
+            width: 20,
+            height: 5,
+            z: 100,
+            pos: new Vector(288, 800),
+            anchor: new Vector(0.5, 0.5),
+            color: Color.White,
+            font: new Font(
+                {
+                    size: 32,
+                    baseAlign: BaseAlign.Middle,
+                    textAlign: TextAlign.Center,
+                    bold: true
+                }),
+            collisionType: CollisionType.PreventCollision
+
+        });
+        this.add(this.score)
 
         const goToTowerButton = new Label({
             text: "Go to Tower",
@@ -72,7 +93,13 @@ class Town extends Scene {
 
     }
 
+    updateScore() {
+        this.score.text = `Dungeon lvl ${this.game.level}`
+    }
+
     onActivate() {
+        console.log(this.level, this.game.level)
+        this.updateScore()
         this.game.showCoins()
 
         this.game.heroes.forEach(hero => {

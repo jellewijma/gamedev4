@@ -9,17 +9,18 @@ class Tower extends Scene {
     game
     hero
     button
-    level = 1
     battle = false
     characters = []
     enemy
     messageLable
+    level
 
     rand = new Random(1234)
     // town
     constructor(game) {
         super()
         this.game = game
+        this.level = game.level
     }
 
     onActivate() {
@@ -151,6 +152,10 @@ class Tower extends Scene {
 
         this.add(this.button)
         this.level += 1
+        this.game.level = this.level
+        Town.level = this.level
+        console.log(this.level, this.game.level)
+        // console.log(Town.updateScore())
     }
 
     onPostUpdate() {
