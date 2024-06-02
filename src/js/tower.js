@@ -133,17 +133,22 @@ class Tower extends Scene {
 
         });
         this.button.on('pointerdown', () => {
-            this.game.goToScene('town')
-            this.remove(this.button)
-            console.log('back to game')
-            this.remove(message)
-            this.remove(this.messageLable)
-            this.characters.forEach(character => {
-                character.health = character.baseHealth
-            })
+            if (this.level === 10) {
+
+            } else {
+                this.game.goToScene('town')
+                this.remove(this.button)
+                console.log('back to game')
+                this.remove(message)
+                this.remove(this.messageLable)
+                this.characters.forEach(character => {
+                    character.health = character.baseHealth
+                })
+            }
         })
 
         this.add(this.button)
+        this.level += 1
     }
 
     onPostUpdate() {
