@@ -2,7 +2,7 @@ import '../css/style.css'
 import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, Animation, Circle, Collider, CollisionType, Shape } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Character } from './character.js'
-import { Placeholder } from './placeholder.js'
+// import { Placeholder } from './placeholder.js'
 
 const ATTACK_STOPPER_INITIAL = 180;
 const RANDOM_SEED = 1234;
@@ -39,9 +39,14 @@ class Hero extends Character {
     animation = Animation;
     bodyCollider
     viewRange
+    inRange = false;
 
     constructor(game) {
         super();
+
+        this.collisionType = CollisionType.Active
+        // this.body = Shape.Box(64, 64);
+
         this.game = game;
 
         this.setupAnimations();
@@ -51,9 +56,15 @@ class Hero extends Character {
         this.rarity = this.getRarity();
         this.setupStatsBasedOnRarity();
         this.name = this.getName();
-        this.setupCustomHitbox();
+        // this.setupCustomHitbox();
         this.HealthBar();
         this.setRandomDestination();
+        this.on('collisionstart', (e) => {
+            console.log(e)
+            if (e.other.name === 'Enemy') {
+                this.inRange = true;
+            }
+        })
     }
 
     setupAnimations() {
@@ -80,14 +91,14 @@ class Hero extends Character {
         return animation;
     }
 
-    setupCustomHitbox() {
-        // const customHitbox = Shape.Box(64, 64);
-        // this.collider.set(customHitbox);
-        this.bodyCollider = new Placeholder('Active', 'square');
-        this.viewRange = new Placeholder('Passive', 'cross');
-        this.addChild(this.bodyCollider);
-        this.addChild(this.viewRange);
-    }
+    // setupCustomHitbox() {
+    //     // const customHitbox = Shape.Box(64, 64);
+    //     // this.collider.set(customHitbox);
+    //     this.bodyCollider = new Placeholder('Fixed', 'square');
+    //     // this.viewRange = new Placeholder('Passive', 'cross');
+    //     this.addChild(this.bodyCollider);
+    //     // this.addChild(this.viewRange);   
+    // }
 
     getRarity() {
         const rarityValue = this.rand.integer(1, 100);
@@ -138,8 +149,7 @@ class Hero extends Character {
     }
 
     fight() {
-        this.viewRange.onCollisionStart()
-        if (this.enemyDist < 64) {
+        if (this.inRange) {
             this.Attack(this.game.currentScene);
         } else {
             this.Move();
@@ -147,9 +157,13 @@ class Hero extends Character {
     }
 
     Attack(Tower) {
+        console.log('attacking');
+        console.log(this.enemy.health)
         if (this.attackStopper > 0) {
+            console.log('attack stopper')
             this.attackStopper -= this.speed;
         } else {
+            console.log('attacking1')
             this.performAttackAnimation();
             this.enemy.health -= this.attack;
             this.attackStopper = ATTACK_STOPPER_INITIAL;
@@ -159,6 +173,8 @@ class Hero extends Character {
             // check if there are any enemies left
             // if (Tower.characters.length === 5) {
             this.handleEnemyDefeat(Tower);
+            this.graphics.use(this.Idle)
+            this.inRange = false;
             // }
             // get new enemy
         }
@@ -174,14 +190,17 @@ class Hero extends Character {
     handleEnemyDefeat(Tower) {
         // console.log('enemy defeated');
         this.game.currentScene.remove(this.enemy);
+        console.log('Enemy defeated');
         Tower.afterBattle('Enemy defeated');
+
     }
 
     Move() {
         const direction = this.enemy.pos.sub(this.pos).normalize();
         const distance = 3;
-        this.pos = this.pos.add(direction.scale(distance));
+        this.vel = direction.scale(distance); // Update the velocity instead of modifying the position directly
         this.enemyDist = this.pos.distance(this.enemy.pos);
+        this.pos = this.pos.add(this.vel); // Update the position based on the velocity
     }
 
     Train() {
@@ -200,7 +219,7 @@ class Hero extends Character {
         } else {
             this.vel = new Vector(0, 0);
         }
-        this.HealthBar();
+        // this.HealthBar();
     }
 
     updatePositionInTown() {
@@ -232,7 +251,8 @@ class Hero extends Character {
             x: 0,
             y: -32,
             z: 10,
-            color: Color.Black
+            color: Color.Black,
+            collisionType: CollisionType.PreventCollision
         });
     }
 
@@ -244,7 +264,8 @@ class Hero extends Character {
             y: -32,
             z: 10,
             color: Color.Red,
-            anchor: vec(0, 0.5)
+            anchor: vec(0, 0.5),
+            collisionType: CollisionType.PreventCollision
         });
     }
 }

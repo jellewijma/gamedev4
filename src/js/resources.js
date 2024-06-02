@@ -22,6 +22,9 @@ const Resources = {
     Sword: new ImageSource('images/sword.png'),
     Warrior: new AsepriteResource('images/warrior/Warrior_Blue.json'),
     Goblin: new AsepriteResource('images/goblin/Torch_Red.json'),
+    Guide: new ImageSource('images/guide.png'),
+    Background: new ImageSource('images/background.png'),
+    SpeachBubble: new ImageSource('images/speach.png')
 }
 
 console.log(Resources)
@@ -34,7 +37,10 @@ const ResourceLoader = new Loader([
     Resources.Tower,
     Resources.Sword,
     Resources.Warrior,
-    Resources.Goblin
+    Resources.Goblin,
+    Resources.Guide,
+    Resources.Background,
+    Resources.SpeachBubble
 ])
 
 export { Resources, ResourceLoader }

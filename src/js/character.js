@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label } from "excalibur"
+import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, CollisionType, Shape } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 
 
@@ -13,7 +13,10 @@ class Character extends Actor {
 
 
     constructor() {
-        super()
+        super({
+            width: 64,
+            height: 64,
+        })
     }
 
 }

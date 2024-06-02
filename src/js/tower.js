@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label } from "excalibur"
+import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, CollisionType } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Town } from './town.js'
 import { Enemy } from './enemy.js'
@@ -13,6 +13,7 @@ class Tower extends Scene {
     battle = false
     characters = []
     enemy
+    messageLable
 
     rand = new Random(1234)
     // town
@@ -71,7 +72,9 @@ class Tower extends Scene {
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center,
                     bold: true
-                })
+                }),
+            collisionType: CollisionType.PreventCollision
+
         });
         this.button.on('pointerdown', () => {
             this.battle = true
@@ -85,10 +88,11 @@ class Tower extends Scene {
         this.battle = false
         // remove old button
         this.remove(this.button)
+        this.remove(this.messageLable)
 
         // this.hero.graphics.use(Resources.Warrior.getAnimation('Idle'))
 
-        const messageLable = new Label({
+        this.messageLable = new Label({
             text: message,
             width: 20,
             height: 5,
@@ -102,13 +106,15 @@ class Tower extends Scene {
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center,
                     bold: true
-                })
+                }),
+            collisionType: CollisionType.PreventCollision
+
         });
-        this.add(messageLable)
+        this.add(this.messageLable)
 
         console.log('after battle')
         // get button and set it to go back to previous scene
-        const button = new Label({
+        this.button = new Label({
             text: "Go back to Town",
             width: 20,
             height: 5,
@@ -122,20 +128,22 @@ class Tower extends Scene {
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center,
                     bold: true
-                })
+                }),
+            collisionType: CollisionType.PreventCollision
+
         });
-        button.on('pointerdown', () => {
+        this.button.on('pointerdown', () => {
             this.game.goToScene('town')
-            this.remove(button)
+            this.remove(this.button)
             console.log('back to game')
             this.remove(message)
-            this.remove(messageLable)
+            this.remove(this.messageLable)
             this.characters.forEach(character => {
                 character.health = character.baseHealth
             })
         })
 
-        this.add(button)
+        this.add(this.button)
     }
 
     onPostUpdate() {
@@ -162,8 +170,8 @@ class Tower extends Scene {
         } else {
             for (let i = 0; i < 1; i++) {
                 const enemy = new Enemy(this.game)
-                enemy.health = 100 * (1 + (level / 10))
-                enemy.baseHealth = 100 * (1 + (level / 10))
+                enemy.health = 40 * (1 + (level / 10))
+                enemy.baseHealth = 40 * (1 + (level / 10))
                 enemy.attack = 10 * (1 + (level / 10))
                 enemy.defense = 5 * (1 + (level / 10))
                 enemy.speed = 5 * (1 + (level / 10))

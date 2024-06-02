@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, ImageSource, SpriteSheet, TileMap } from "excalibur"
+import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, ImageSource, SpriteSheet, TileMap, CollisionType } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 
 class Town extends Scene {
@@ -29,7 +29,9 @@ class Town extends Scene {
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center,
                     bold: true
-                })
+                }),
+            collisionType: CollisionType.PreventCollision
+
         });
         summeningHeroeButton.on('pointerdown', () => {
             this.game.summonHero()
@@ -51,7 +53,9 @@ class Town extends Scene {
                     baseAlign: BaseAlign.Middle,
                     textAlign: TextAlign.Center,
                     bold: true
-                })
+                }),
+            collisionType: CollisionType.PreventCollision
+
         });
         goToTowerButton.on('pointerdown', () => {
             // const tower = new Tower(game)

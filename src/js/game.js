@@ -5,6 +5,7 @@ import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGr
 import { Resources, ResourceLoader } from './resources.js'
 import { Tower } from './tower.js'
 import { Town } from './town.js'
+import { Intro } from './intro.js'
 import { Hero } from './hero.js'
 
 
@@ -29,11 +30,14 @@ export class Game extends Engine {
         const tower = new Tower(this)
         this.add('tower', tower)
 
-        this.coins = 5
+        const intro = new Intro(this)
+        this.add('intro', intro)
+
+        this.coins = 1
     }
 
     startGame() {
-        this.goToScene('town')
+        this.goToScene('intro')
     }
 
     summonHero() {

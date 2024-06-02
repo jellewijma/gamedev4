@@ -1,7 +1,8 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label } from "excalibur"
+import { Actor, Engine, Vector, Loader, Font, Text, Rectangle, Color, GraphicsGroup, Direction, BaseAlign, TextAlign, vec, Scene, Random, Label, CollisionType, Shape } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Character } from './character.js'
+// import { Placeholder } from './placeholder.js'
 
 
 class Enemy extends Character {
@@ -19,6 +20,9 @@ class Enemy extends Character {
 
     game
 
+    bodyCollider
+    inRange = false
+
     constructor(game) {
         super()
         const goblinAnim = Resources.Goblin.getAnimation('Idle')
@@ -29,19 +33,33 @@ class Enemy extends Character {
 
         // distribute stats based on rarity
         if (this.rarity == 'common') {
-            this.health = 100
-            this.baseHealth = 100
+            this.health = 5
+            this.baseHealth = 5
             this.attack = 10
             this.defense = 5
             this.speed = 5
         } else if (this.rarity == 'boss') {
-            this.health = 200
-            this.baseHealth = 200
+            this.health = 10
+            this.baseHealth = 10
             this.attack = 20
             this.defense = 14
             this.speed = 3
         }
         this.game = game
+
+        this.z = 10
+
+        this.collisionType = CollisionType.Active
+        // this.colliderShape = Shape.Box(64, 64);
+
+        // this.setupCustomHitbox()
+
+        this.on('collisionstart', (e) => {
+            console.log(e)
+            if (e.other.name === 'Hero') {
+                this.inRange = true;
+            }
+        })
     }
 
     getTowerLvl() {
@@ -72,17 +90,16 @@ class Enemy extends Character {
             // check if there are any enemies left
             // else afterBattle()
             Tower.afterBattle('Hero defeated')
+            this.inRange = false;
         }
     }
 
     Move() {
-        // get enemy pos and move 2px towards it
         const direction = this.enemy.pos.sub(this.pos).normalize();
-        const distance = 3; // Change this value to adjust the distance
-        this.pos = this.pos.add(direction.scale(distance));
-
-        this.enemyDist = this.pos.distance(this.enemy.pos)
-
+        const distance = 3;
+        this.vel = direction.scale(distance); // Update the velocity instead of modifying the position directly
+        this.enemyDist = this.pos.distance(this.enemy.pos);
+        this.pos = this.pos.add(this.vel); // Update the position based on the velocity
     }
 
     Train() {
@@ -120,17 +137,25 @@ class Enemy extends Character {
 
     onPostUpdate() {
         // update health bar
-        this.HealthBar()
+        // this.HealthBar()
     }
 
     fight() {
-        // this.viewRange.onCollisionStart()
-        if (this.enemyDist < 64) {
+        if (this.inRange) {
             this.Attack(this.game.currentScene);
         } else {
             this.Move();
         }
     }
+
+    // setupCustomHitbox() {
+    //     // const customHitbox = Shape.Box(64, 64);
+    //     // this.collider.set(customHitbox);
+    //     // this.bodyCollider = new Placeholder('Fixed', 'square');
+    //     // this.viewRange = new Placeholder('Passive', 'cross');
+    //     // this.addChild(this.bodyCollider);
+    //     // this.addChild(this.viewRange);   
+    // }
 
 }
 export { Enemy }
